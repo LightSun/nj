@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
  * Copyright (c) 2000, 2019 IBM Corp. and others
  *
  * This program and the accompanying materials are made available under
@@ -1700,6 +1700,7 @@ X86OpCodesTest::invokeUnaryTests()
    testCaseNum = sizeof(byteDataArray) / sizeof(byteDataArray[0]);
    for (uint32_t i = 0; i < testCaseNum; ++i)
       {
+      printf("test byteDataArray: i = %u\n", i);
       OMR_CT_EXPECT_EQ(_b2s, convert(byteDataArray[i], SHORT_POS), _b2s(byteDataArray[i]));
       OMR_CT_EXPECT_EQ(_b2i, convert(byteDataArray[i], INT_POS), _b2i(byteDataArray[i]));
       OMR_CT_EXPECT_EQ(_b2l, convert(byteDataArray[i], LONG_POS), _b2l(byteDataArray[i]));

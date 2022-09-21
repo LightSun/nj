@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
  * Copyright (c) 2000, 2018 IBM Corp. and others
  *
  * This program and the accompanying materials are made available under
@@ -1193,6 +1193,10 @@ extern JIT_NodeRef JIT_CreateNode2C(JIT_NodeOpCode opcode, JIT_NodeRef c1, JIT_N
  */
 extern JIT_NodeRef JIT_CreateNode3C(JIT_NodeOpCode opcode, JIT_NodeRef c1, JIT_NodeRef c2, JIT_NodeRef c3);
 
+/**
+ *  create struct node with child
+ */
+extern JIT_NodeRef JIT_CreateStructNode(JIT_NodeOpCode op, uint16_t numberChild, JIT_NodeRef* childNodes);
 /**
  * If the given node is not a TreeTrop - creates a new TreeTop node
  * and anchors the node in the treetop.

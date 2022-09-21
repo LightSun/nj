@@ -21,18 +21,26 @@
 
 cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 
-project(tril_incordec LANGUAGES C CXX)
+project(lvjit LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_executable(incordec
-	main.cpp
-)
+### lua-omr
+include_directories(.)
+include_directories(lvjit)
+include_directories(lua)
+file(GLOB SRC_LUA lua/*.h lua/*.c)
+file(GLOB SRC_LV_JIT lvjit/*.cpp)
 
-target_link_libraries(incordec
-	tril
-)
+get_filename_component(full_path_test_cpp lua/luac.c ABSOLUTE)
+list(REMOVE_ITEM SRC_LUA "${full_path_test_cpp}")
 
-set_property(TARGET incordec PROPERTY FOLDER fvtest/tril/examples)
+add_executable(lvjit
+    ${SRC_LV_JIT}
+    ${SRC_LUA})
+#add_compile_definitions(LUA_C_LINKAGE)
+target_compile_definitions(lvjit PUBLIC LUA_C_LINKAGE)
+target_link_libraries(lvjit tril)
+set_property(TARGET lvjit PROPERTY FOLDER fvtest/tril/examples)

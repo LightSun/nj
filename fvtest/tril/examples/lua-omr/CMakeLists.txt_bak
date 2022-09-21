@@ -1,0 +1,27 @@
+﻿cmake_minimum_required(VERSION 3.5)
+
+project(lua-omr LANGUAGES C CXX)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+file(GLOB SRC_LUA lua/*.h lua/*.c)
+file(GLOB SRC_LV_JIT lvjit/*.cpp)
+
+SET(OMR_INC_DIR D:/study/github/THIRDS/nj)
+include_directories(.)
+include_directories(lvjit)
+include_directories(${OMR_INC_DIR})
+include_directories(${OMR_INC_DIR}/compiler)
+
+add_compile_definitions(LUA_C_LINKAGE)
+
+add_executable(lvjit
+    ${SRC_LV_JIT}
+    ${SRC_LUA}
+    )
+
+SET(OMR_LIB1 D:/study/github/THIRDS/build-nj-Desktop_Qt_5_12_9_MSVC2017_64bit-Debug/jitbuilder/jitbuilder.lib)
+SET(OMR_LIB D:/study/github/THIRDS/build-nj-Desktop_Qt_5_12_9_MSVC2017_64bit-Debug/frontends/nj/nj.lib)
+target_link_libraries(lvjit ${OMR_LIB1} ${OMR_LIB})

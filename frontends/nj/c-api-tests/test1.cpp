@@ -1,4 +1,4 @@
-#include "nj_api.h"
+﻿#include "nj_api.h"
 
 #include <stdio.h>
 
@@ -113,6 +113,55 @@ static int test3(JIT_ContextRef ctx) {
   return rc;
 }
 
+struct Student{
+    const char* name;
+    int age;
+};
+
+static int printStudent(struct Student* stu){
+    printf("printStudent: age = %d\n", stu->age);
+    return 0;
+}
+
+static bool test4_il(JIT_ILInjectorRef ilinjector, void *userdata) {
+    JIT_CreateBlocks(ilinjector, 1);
+    JIT_SetCurrentBlock(ilinjector, 0);
+    //
+    auto input = JIT_LoadParameter(ilinjector, 0);         // Load arg
+    JIT_NodeRef args[] = { input };
+    auto value = JIT_Call(ilinjector, "printStudent", 1, args); // Call callme(input)
+    //
+    auto node = JIT_CreateNode1C(OP_ireturn, value);
+    JIT_GenerateTreeTop(ilinjector, node);
+    JIT_CFGAddEdge(ilinjector,
+                   JIT_BlockAsCFGNode(JIT_GetCurrentBlock(ilinjector)),
+                   JIT_GetCFGEnd(ilinjector));
+    return true;
+}
+
+static int test4(JIT_ContextRef ctx) {
+  JIT_Type params[1] = {
+      JIT_Address
+  };
+  JIT_RegisterFunction(ctx, "printStudent", JIT_Int32, 1, params, (void *)printStudent);
+  JIT_FunctionBuilderRef function_builder = JIT_CreateFunctionBuilder(
+      ctx, "ret4", JIT_Int32, 1, params, test4_il, NULL);
+  int rc = 0;
+  typedef void (*F)(struct Student*);
+  F f = (F)JIT_Compile(function_builder, 2);
+  if (f) {
+    struct Student stu;
+    stu.age = 18;
+    f(&stu);
+    printf("Function(test4_ret4) returned.\n");
+    rc = 0;
+  }else{
+    rc = 1;
+  }
+  JIT_DestroyFunctionBuilder(function_builder);
+  return rc;
+}
+
 int main(int argc, const char *argv[]) {
   int errorcount = 0;
   JIT_ContextRef ctx = JIT_CreateContext();
@@ -120,6 +169,7 @@ int main(int argc, const char *argv[]) {
     errorcount += test1(ctx);
     errorcount += test2(ctx);
     errorcount += test3(ctx);
+    errorcount += test4(ctx);
   } else {
     errorcount = 1;
   }

@@ -21,3 +21,4 @@
 
 add_subdirectory(incordec)
 add_subdirectory(mandelbrot)
+add_subdirectory(lua-omr)

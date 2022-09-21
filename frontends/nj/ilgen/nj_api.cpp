@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
  * Copyright (c) 2000, 2018 IBM Corp. and others
  *
  * This program and the accompanying materials are made available under
@@ -497,6 +497,18 @@ JIT_NodeRef JIT_CreateNode3C(JIT_NodeOpCode opcode, JIT_NodeRef c1, JIT_NodeRef 
     return wrap_node(TR::Node::create((TR::ILOpCodes)opcode, 3, n1, n2, n3));
 }
 
+JIT_NodeRef JIT_CreateStructNode(JIT_NodeOpCode op, uint16_t numberChild, JIT_NodeRef* childNodes){
+    TR_ASSERT(TR::Node::isLegalCallToCreate(op), "assertion failure");
+    TR::Node * n = TR::Node::create((TR::ILOpCodes)op, numberChild);
+    for(int i = 0 ; i < numberChild; i ++){
+        auto node = unwrap_node(childNodes[i]);
+        n->setAndIncChild(i, node);
+    }
+    n->setAlignTLHAlloc(true);
+
+    return wrap_node(n);
+}
+
 JIT_TreeTopRef JIT_GenerateTreeTop(JIT_ILInjectorRef ilinjector, JIT_NodeRef n)
 {
     auto injector = unwrap_ilinjector(ilinjector);
@@ -607,6 +619,7 @@ static TR::Node* get_array_element_address(
         }
         addOp = TR::aiadd;
     }
+    //indexNode->findChild()
     TR::Node* addrNode = TR::Node::create(addOp, 2, baseNode, indexNode);
     return addrNode;
 }
@@ -619,6 +632,7 @@ JIT_NodeRef JIT_ArrayLoad(JIT_ILInjectorRef ilinjector, JIT_NodeRef basenode, JI
     auto type = TR::DataType((TR::DataTypes)dt);
     auto array_offset = get_array_element_address(injector, type, base, index);
     auto loadOp = TR::ILOpCode::indirectLoadOpCode(type);
+    //injector->symRefTab()->createLocalObject(4, injector->methodSymbol(), );
 #if 1
     TR::SymbolReference* symRef = injector->symRefTab()->findOrCreateArrayShadowSymbolRef(type, base);
     TR::Node* load = TR::Node::createWithSymRef(loadOp, 1, array_offset, 0, symRef);

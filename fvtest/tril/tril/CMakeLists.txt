@@ -1,4 +1,4 @@
-###############################################################################
+﻿###############################################################################
 # Copyright (c) 2017, 2019 IBM Corp. and others
 #
 # This program and the accompanying materials are made available under
@@ -39,9 +39,10 @@ list(APPEND TRIL_FLEX_FLAGS
 # There is no unistd.h on Windows, so if win_flex.exe is in use,
 # the --wincompat option must be added.
 if(OMR_HOST_OS STREQUAL "win")
-	list(APPEND TRIL_FLEX_FLAGS
-		"--wincompat"
-	)
+        list(APPEND TRIL_FLEX_FLAGS
+                #"--wincompat"
+                "--nounistd"
+        )
 endif()
 
 omr_stringify(TRIL_FLEX_OPTIONS ${TRIL_FLEX_FLAGS})

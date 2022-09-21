@@ -1,4 +1,4 @@
-###############################################################################
+﻿###############################################################################
 # Copyright (c) 2017, 2017 IBM Corp. and others
 #
 # This program and the accompanying materials are made available under
@@ -26,6 +26,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 macro(create_nj_test target)
+        message(STATUS "CMAKE_DL_LIBS: ${CMAKE_DL_LIBS}")
 	add_executable(${target} ${ARGN})
 	target_link_libraries(${target}
 		nj

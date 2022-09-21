@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
  * Copyright (c) 1996, 2018 IBM Corp. and others
  *
  * This program and the accompanying materials are made available under
@@ -35,6 +35,12 @@
 #include "cs2/allocator.h"
 #include "cs2/listof.h"
 #include "cs2/hashtab.h"
+
+#if defined(_WIN32)
+#ifndef OMR_OS_WINDOWS
+#define OMR_OS_WINDOWS 1
+#endif
+#endif
 
 #if defined(OMR_OS_WINDOWS)
 #include <time.h>
