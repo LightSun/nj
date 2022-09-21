@@ -37,7 +37,10 @@ file(GLOB SRC_LV_JIT lvjit/*.cpp)
 get_filename_component(full_path_test_cpp lua/luac.c ABSOLUTE)
 list(REMOVE_ITEM SRC_LUA "${full_path_test_cpp}")
 
-add_executable(lvjit
+get_filename_component(full_path_test_cpp lua/lua.c ABSOLUTE)
+list(REMOVE_ITEM SRC_LUA "${full_path_test_cpp}")
+
+add_library(lvjit
     ${SRC_LV_JIT}
     ${SRC_LUA})
 #add_compile_definitions(LUA_C_LINKAGE)
