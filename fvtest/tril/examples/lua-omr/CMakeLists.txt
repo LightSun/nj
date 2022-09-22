@@ -23,6 +23,7 @@ cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 
 project(lvjit LANGUAGES C CXX)
 
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -g -O3")
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -46,4 +47,10 @@ add_library(lvjit
 #add_compile_definitions(LUA_C_LINKAGE)
 target_compile_definitions(lvjit PUBLIC LUA_C_LINKAGE)
 target_link_libraries(lvjit tril)
+set_property(TARGET lvjit PROPERTY FOLDER fvtest/tril/examples)
+### main of lvjit
+add_executable(lvjit_main
+    main.cpp
+    )
+target_link_libraries(lvjit_main lvjit)
 set_property(TARGET lvjit PROPERTY FOLDER fvtest/tril/examples)

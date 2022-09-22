@@ -1002,7 +1002,7 @@ bool Lua::FunctionBuilder::buildIL() {
 #if DEBUG
       fprintf(stderr, "\t%s", (char*)luaP_opnames[GET_OPCODE(instruction)]);
 #endif
-
+      //TODO impl: OP_LOADKX , OP_EXTRAARG
       switch (GET_OPCODE(instruction)) {
       case OP_MOVE:
          do_move(builder, instruction);
@@ -1148,6 +1148,15 @@ bool Lua::FunctionBuilder::buildIL() {
       case OP_VARARG:
          do_vararg(builder, instruction);
          break;
+
+      case OP_LOADKX:
+         fprintf(stderr, "'OP_LOADKX' not impl.\n");
+         return false;
+
+      case OP_EXTRAARG:
+         fprintf(stderr, "'OP_EXTRAARG' not impl.\n");
+         return false;
+
       default:
          return false;
       }
@@ -2292,6 +2301,7 @@ void Lua::FunctionBuilder::jit_Protect(TR::IlBuilder* builder) {
 }
 
 TR::IlValue* Lua::FunctionBuilder::jit_R(TR::BytecodeBuilder* builder, int arg) {
+    //luaTypes.StkId: stack index
    auto reg = builder->IndexAt(luaTypes.StkId,
               builder->        Load("base"),
               builder->        ConstInt32(arg));

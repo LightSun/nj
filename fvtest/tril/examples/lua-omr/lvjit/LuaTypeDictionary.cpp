@@ -21,6 +21,7 @@
 
 #include <type_traits>
 
+//decltype: like auto, used to infer type
 #define DEFINE_FIELD_T(type, field) DefineField(#type, #field, toIlType<decltype(type::field)>())
 #define DEFINE_FIELD(type, field, ilt)\
     DefineField(#type, #field, ilt)
